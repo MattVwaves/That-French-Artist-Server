@@ -35,7 +35,22 @@ const createShopItem = async (req, res) => {
   }
 };
 
+const getShopItemsByCategory = async (req, res) => {
+  const { category } = req.params;
+  try {
+    const itemsList = await prisma.shopItem.findMany({
+      where: {
+        category,
+      },
+    });
+    return res.status(200).json({ itemsList });
+  } catch (e) {
+    return res.status(500).json({ error: 'server error' });
+  }
+};
+
 module.exports = {
   createDisplayItem,
   createShopItem,
+  getShopItemsByCategory,
 };
