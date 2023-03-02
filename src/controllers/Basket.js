@@ -1,5 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient, Prisma } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { getShopItemById } = require('./Item');
 
 const createBasket = async (req, res) => {
   console.log(10);
@@ -35,12 +36,38 @@ const getBasketById = async (req, res) => {
 };
 
 const addToBasket = async (req, res) => {
-  const { basketId } = req.params;
-  const basket = getBasketById(basketId);
+  const { id } = req.params;
+  const { description, category, price } = req.body;
+
+  const basketItem = await prisma.basketItem.create({
+    data: {
+      description,
+      category,
+      price,
+    },
+  });
+
+  const updatedBasket = await prisma.basket.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      basketItems: {
+        connect: {
+          id: basketItem.id,
+        },
+      },
+    },
+    include: {
+      basketItems: true,
+    },
+  });
+  res.status(201).json({ updatedBasket });
 };
 
 module.exports = {
   createBasket,
   getAllBaskets,
   getBasketById,
+  addToBasket,
 };

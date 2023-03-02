@@ -28,9 +28,19 @@ model ShopItem {
   basketId    Int?
 }
 
+model BasketItem {
+  id          Int     @id @default(autoincrement())
+  description String
+  category    String
+  price       String
+  Basket      Basket? @relation(fields: [basketId], references: [id])
+  basketId    Int?
+}
+
 model Basket {
-  id        Int        @id @default(autoincrement())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  shopItems ShopItem[]
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  shopItems   ShopItem[]
+  basketItems BasketItem[]
 }

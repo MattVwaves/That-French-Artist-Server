@@ -35,7 +35,7 @@ const createShopItem = async (req, res) => {
 };
 
 const getShopItemsByCategory = async (req, res) => {
-  const { category } = query.params;
+  const { category } = req.query;
   try {
     const itemsList = await prisma.shopItem.findMany({
       where: {
