@@ -3,11 +3,26 @@ const prisma = new PrismaClient();
 const { getShopItemById } = require('./Item');
 
 const createBasket = async (req, res) => {
-  console.log(10);
+  const { description, category, price } = req.body;
+
+  const basketItem = await prisma.basketItem.create({
+    data: {
+      description,
+      category,
+      price,
+    },
+  });
+
   const basket = await prisma.basket.create({
-    data: {},
+    data: {
+      basketItems: {
+        connect: {
+          id: basketItem.id,
+        },
+      },
+    },
     include: {
-      shopItems: true,
+      basketItems: true,
     },
   });
   res.status(201).json({ basket });
@@ -16,7 +31,7 @@ const createBasket = async (req, res) => {
 const getAllBaskets = async (req, res) => {
   const baskets = await prisma.basket.findMany({
     include: {
-      shopItems: true,
+      basketItems: true,
     },
   });
   res.status(200).json({ baskets });
@@ -29,7 +44,7 @@ const getBasketById = async (req, res) => {
       id: Number(id),
     },
     include: {
-      shopItems: true,
+      basketItems: true,
     },
   });
   res.status(200).json({ basket });
