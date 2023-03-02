@@ -12,6 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 const itemRouter = require('./routers/Item');
 app.use('/item', itemRouter);
 
+const basketRouter = require('./routers/Basket');
+app.use('/basket', basketRouter);
+
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`\n Server is running on http://localhost:${port}\n`);

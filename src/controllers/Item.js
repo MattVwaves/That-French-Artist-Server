@@ -12,7 +12,6 @@ const createDisplayItem = async (req, res) => {
     const displayItem = await prisma.displayItem.create({
       data: {
         description,
-        url,
         category,
         subCategory,
       },
@@ -24,10 +23,10 @@ const createDisplayItem = async (req, res) => {
 };
 
 const createShopItem = async (req, res) => {
-  const { description, url, category, price, quantity } = req.body;
+  const { description, category, price, quantity } = req.body;
   try {
     const shopItem = await prisma.shopItem.create({
-      data: { description, url, category, price, quantity },
+      data: { description, category, price, quantity },
     });
     return res.status(201).json({ shopItem });
   } catch (e) {
@@ -36,7 +35,7 @@ const createShopItem = async (req, res) => {
 };
 
 const getShopItemsByCategory = async (req, res) => {
-  const { category } = req.params;
+  const { category } = query.params;
   try {
     const itemsList = await prisma.shopItem.findMany({
       where: {
@@ -49,8 +48,20 @@ const getShopItemsByCategory = async (req, res) => {
   }
 };
 
+const getShopItemById = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const shopItem = await prisma.shopItem.findFirst({
+    where: {
+      id: Number(id),
+    },
+  });
+  res.status(200).json({ shopItem });
+};
+
 module.exports = {
   createDisplayItem,
   createShopItem,
   getShopItemsByCategory,
+  getShopItemById,
 };
