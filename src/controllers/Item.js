@@ -86,10 +86,25 @@ const deleteBasketItem = async (req, res) => {
   res.status(201).json({ updatedBasket });
 };
 
+const createBasketItem = async (req, res) => {
+  const { description, category, price } = req.body;
+  const { id } = req.params;
+  const basketItem = await prisma.basketItem.create({
+    data: {
+      description,
+      category,
+      price,
+      basketId: Number(id),
+    },
+  });
+  res.status(201).json({ basketItem });
+};
+
 module.exports = {
   createDisplayItem,
   createShopItem,
   getShopItemsByCategory,
   getShopItemById,
   deleteBasketItem,
+  createBasketItem,
 };
