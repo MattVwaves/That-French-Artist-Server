@@ -7,7 +7,7 @@ const saltRounds = 10;
 const secret = process.env.JWT_SECRET;
 
 const createDisplayItem = async (req, res) => {
-  const { description, url, category, subCategory } = req.body;
+  const { description, category, subCategory } = req.body;
   try {
     const displayItem = await prisma.displayItem.create({
       data: {
@@ -20,6 +20,16 @@ const createDisplayItem = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: 'server error' });
   }
+};
+
+const deleteDisplayItem = async (req, res) => {
+  const { id } = req.params;
+  const displayItem = await prisma.displayItem.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+  res.status(201).json({ displayItem });
 };
 
 const createShopItem = async (req, res) => {
@@ -46,6 +56,16 @@ const getShopItemsByCategory = async (req, res) => {
   } catch (e) {
     return res.status(500).json({ error: 'server error' });
   }
+};
+
+const getDisplayItemsBySubCategory = async (req, res) => {
+  const { subcategory } = req.query;
+  const itemsList = await prisma.displayItem.findMany({
+    where: {
+      subCategory: subcategory,
+    },
+  });
+  return res.status(200).json({ itemsList });
 };
 
 const getShopItemById = async (req, res) => {
@@ -104,7 +124,9 @@ module.exports = {
   createDisplayItem,
   createShopItem,
   getShopItemsByCategory,
+  getDisplayItemsBySubCategory,
   getShopItemById,
   deleteBasketItem,
   createBasketItem,
+  deleteDisplayItem,
 };
