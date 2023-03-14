@@ -79,31 +79,59 @@ const getShopItemById = async (req, res) => {
   res.status(200).json({ shopItem });
 };
 
+// const deleteBasketItem = async (req, res) => {
+//   const { description, basketId } = req.body;
+//   console.log(req.body);
+
+//   const basketItem = await prisma.basketItem.findFirst({
+//     where: {
+//       description,
+//       basketId: Number(basketId),
+//     },
+//   });
+//   const deletedItem = await prisma.basketItem.delete({
+//     where: {
+//       id: basketItem.id,
+//     },
+//   });
+//   const updatedBasket = await prisma.basket.findFirst({
+//     where: {
+//       id: Number(basketId),
+//     },
+//     include: {
+//       basketItems: true,
+//     },
+//   });
+
+//   res.status(201).json({ updatedBasket });
+// };
+
 const deleteBasketItem = async (req, res) => {
-  const { description, basketId } = req.body;
-  console.log(req.body);
+  const { id } = req.params;
 
-  const basketItem = await prisma.basketItem.findFirst({
+  const deletedBasketItem = await prisma.basketItem.delete({
     where: {
-      description,
-      basketId: Number(basketId),
-    },
-  });
-  const deletedItem = await prisma.basketItem.delete({
-    where: {
-      id: basketItem.id,
-    },
-  });
-  const updatedBasket = await prisma.basket.findFirst({
-    where: {
-      id: Number(basketId),
-    },
-    include: {
-      basketItems: true,
+      id: Number(id),
     },
   });
 
-  res.status(201).json({ updatedBasket });
+  res.status(201).json({ deletedBasketItem });
+};
+
+const updateBasketItem = async (req, res) => {
+  const { id } = req.params;
+  const { quantity } = req.body;
+
+  const updatedBasketItem = await prisma.basketItem.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      quantity: quantity,
+    },
+  });
+
+  res.status(201).json({ updatedBasketItem });
 };
 
 const createBasketItem = async (req, res) => {
@@ -129,4 +157,5 @@ module.exports = {
   deleteBasketItem,
   createBasketItem,
   deleteDisplayItem,
+  updateBasketItem,
 };

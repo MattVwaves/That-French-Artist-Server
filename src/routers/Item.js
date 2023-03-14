@@ -8,6 +8,7 @@ const {
   createBasketItem,
   getDisplayItemsBySubCategory,
   deleteDisplayItem,
+  updateBasketItem,
 } = require('../controllers/Item');
 
 const router = express.Router();
@@ -18,7 +19,8 @@ router.delete('/display/:id', deleteDisplayItem);
 router.post('/shop', createShopItem);
 router.get('/shop', getShopItemsByCategory);
 router.get('/shop/:id', getShopItemById);
-router.delete('/basket', deleteBasketItem);
+router.delete('/basket/:id', deleteBasketItem);
 router.post('/basket/:id', createBasketItem);
+router.patch('/basket/:id', updateBasketItem);
 
 module.exports = router;

@@ -33,6 +33,7 @@ model BasketItem {
   description String
   category    String
   price       String
+  quantity    Int?    @default(1)
   Basket      Basket? @relation(fields: [basketId], references: [id])
   basketId    Int?
 }
