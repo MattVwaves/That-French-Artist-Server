@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('./Client');
 
 const createBasketItem = async (req, res) => {
   const { description, category, price, quantity } = req.body;

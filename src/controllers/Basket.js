@@ -1,5 +1,5 @@
-const { PrismaClient, Prisma } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('./Client.js');
+
 const { getShopItemById } = require('./Item');
 
 const createBasket = async (req, res) => {
@@ -15,7 +15,7 @@ const createBasket = async (req, res) => {
 
   const basket = await prisma.basket.create({
     data: {
-      basketItems: {
+      basketItemm: {
         connect: {
           id: basketItem.id,
         },
