@@ -15,9 +15,9 @@ const createBasket = async (req, res) => {
 
   const basket = await prisma.basket.create({
     data: {
-      basketItemm: {
+      basketItems: {
         connect: {
-          id: basketItem.id,
+          id: Number(basketItem.id),
         },
       },
     },

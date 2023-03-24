@@ -92,13 +92,13 @@ const getShopItemById = async (req, res) => {
 const deleteBasketItem = async (req, res) => {
   const { id } = req.params;
 
-  const deletedBasketItem = await prisma.basketItem.delete({
+  const basketItem = await prisma.basketItem.delete({
     where: {
       id: Number(id),
     },
   });
 
-  res.status(201).json({ deletedBasketItem });
+  res.status(201).json({ basketItem });
 };
 
 const updateBasketItem = async (req, res) => {
