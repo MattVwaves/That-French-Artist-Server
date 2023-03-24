@@ -5,27 +5,25 @@ const { getShopItemById } = require('./Item');
 const createBasket = async (req, res) => {
   const { description, category, price } = req.body;
 
-  const basketItem = await prisma.basketItem.create({
-    data: {
-      description,
-      category,
-      price,
-    },
-  });
-
-  const basket = await prisma.basket.create({
-    data: {
-      basketItems: {
-        connect: {
-          id: Number(basketItem.id),
+  try {
+    const basket = await prisma.basket.create({
+      data: {
+        basketItems: {
+          create: {
+            description,
+            category,
+            price,
+          },
         },
       },
-    },
-    include: {
-      basketItems: true,
-    },
-  });
-  res.status(201).json({ basket });
+      include: {
+        basketItems: true,
+      },
+    });
+    res.status(201).json({ basket });
+  } catch {
+    return res.status(500).json({ error: 'server error' });
+  }
 };
 
 const getAllBaskets = async (req, res) => {

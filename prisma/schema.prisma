@@ -28,20 +28,20 @@ model ShopItem {
   basketId    Int?
 }
 
+model Basket {
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  shopItems   ShopItem[]
+  basketItems BasketItem[] @relation(name: "basketItems")
+}
+
 model BasketItem {
   id          Int     @id @default(autoincrement())
   description String
   category    String
   price       String
   quantity    Int?    @default(1)
-  Basket      Basket? @relation(fields: [basketId], references: [id])
+  basket      Basket? @relation(name: "basketItems", fields: [basketId], references: [id])
   basketId    Int?
-}
-
-model Basket {
-  id          Int          @id @default(autoincrement())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  shopItems   ShopItem[]
-  basketItems BasketItem[]
 }
