@@ -1,7 +1,9 @@
-require('dotenv').config;
+// require('dotenv').config;
+const env = require('dotenv').config({ path: './.env' });
 
 const express = require('express');
 const cors = require('cors');
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2022-11-15',
 });
@@ -21,11 +23,29 @@ app.use('/basket', basketRouter);
 
 app.get('/config', (req, res) => {
   res.send({
-    publishablekey: process.env.STRIPE_PUBLISHABLE_KEY,
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
   });
 });
 
-app.post('/create-payment-intent', async (req, res) => {});
+app.post('/create-payment-intent', async (req, res) => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      currency: 'eur',
+      amount: 1999,
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+    console.log(paymentIntent);
+    res.send({ clientSecret: paymentIntent.client_secret });
+  } catch (e) {
+    return res.status(400).send({
+      error: {
+        message: e.message,
+      },
+    });
+  }
+});
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
