@@ -125,7 +125,11 @@ const createBasketItem = async (req, res) => {
       description,
       category,
       price,
-      basketId: Number(id),
+      basket: {
+        connect: {
+          id: Number(id),
+        },
+      },
     },
   });
   res.status(201).json({ basketItem });
