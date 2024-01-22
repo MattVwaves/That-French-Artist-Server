@@ -20,9 +20,9 @@ const createCheckout = async (req, res) => {
   console.log(line_items);
 
   const session = await stripe.checkout.sessions.create({
-    // shipping_address_collection: {
-    //   allowed_countries: ['US', 'GB', 'FR'],
-    // },
+    shipping_address_collection: {
+      allowed_countries: ['GB'],
+    },
     shipping_options: [
       {
         shipping_rate_data: {
