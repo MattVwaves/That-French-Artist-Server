@@ -4,6 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
 
 const createCheckout = async (req, res) => {
   const { newBasket, shippingCost } = req.body;
+  console.log(typeof newBasket[0].price);
   const line_items = newBasket.map((item) => {
     return {
       price_data: {
@@ -16,6 +17,7 @@ const createCheckout = async (req, res) => {
       quantity: item.quantity,
     };
   });
+  console.log(line_items);
 
   const session = await stripe.checkout.sessions.create({
     // shipping_address_collection: {
@@ -26,7 +28,8 @@ const createCheckout = async (req, res) => {
         shipping_rate_data: {
           type: 'fixed_amount',
           fixed_amount: {
-            amount: shippingCost * 100,
+            amount: 300,
+            // amount: shippingCost * 100,
             currency: 'gbp',
           },
           display_name: 'standard shipping',
